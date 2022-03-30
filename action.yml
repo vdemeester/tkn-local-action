@@ -34,8 +34,14 @@ runs:
         tag="${{ inputs.version }}"
       esac
 
+      os=${{ runner.os }}
+      if [[ $os == "macOS" ]]; then
+        os="Darwin"
+      fi
+
       if [[ ! -z ${tag} ]]; then
         echo "Installing tkn-local @ ${tag} for ${os}"
+        https://github.com/vdemeester/buildkit-tekton/releases/download/v0.3.1/tkn-local_0.3.1_Linux_x86_64.tar.gz
         curl -fsL https://github.com/vdemeester/buildkit-tekton/releases/download/${tag}/tkn-local_${tag:1}_${os}_x86_64.tar.gz | sudo tar xzf - -C /usr/local/bin tkn-local
       fi
 
