@@ -6,7 +6,7 @@ on:
 
 jobs:
   use-action:
-    name: Use Aciton
+    name: Use Action
     strategy:
       matrix:
         platform: [ubuntu-latest, macos-latest]
