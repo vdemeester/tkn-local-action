@@ -58,7 +58,11 @@ runs:
 
       if [[ ! -z ${pac_tag} ]]; then
         echo "Installing tkn-pac @ ${pac_tag} for ${os}"
-        curl -fsL https://github.com/openshift-pipelines/pipelines-as-code/releases/download/${pac_tag}/tkn-pac_${pac_tag}_${os}_x86_64.tar.gz | sudo tar xzf - -C /usr/local/bin tkn-pac
+        URL="https://github.com/openshift-pipelines/pipelines-as-code/releases/download/${pac_tag}/tkn-pac_${pac_tag}_${os}_x86_64.tar.gz"
+        if [[ $os == "Darwin" ]]; then
+          URL="https://github.com/openshift-pipelines/pipelines-as-code/releases/download/${pac_tag}/tkn-pac_${pac_tag}_MacOS_All.tar.gz"
+        fi
+        curl -fsL ${URL} | sudo tar xzf - -C /usr/local/bin tkn-pac
       fi
 
       # Run !
