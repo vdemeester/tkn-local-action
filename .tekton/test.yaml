@@ -13,7 +13,7 @@ spec:
             script: |
               echo hello
       - name: bye
-        runAfter: [ bye ]
+        runAfter: [ hello ]
         taskSpec:
           steps:
           - image: bye
