@@ -76,6 +76,5 @@ runs:
         file=$(mktemp -p $(mktemp -d -p ${PWD}))
         tkn-pac resolve -p=revision=${{ github.ref }} -p=repo-url=github.com/${{ github.repository }} -f ${{ inputs.file }} > ${file}
       fi
-      cat ${file}
       tkn-local run -f ${file}
     shell: bash
