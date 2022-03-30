@@ -19,6 +19,7 @@ jobs:
     - uses: vdemeester/tkn-local-action@main
       with:
         file: .tekton/test.yaml
+        pipeline-as-code: false
 
     # Pipeline-as-code
     - uses: vdemeester/tkn-local-action@main

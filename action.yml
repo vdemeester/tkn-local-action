@@ -8,6 +8,10 @@ inputs:
     description: 'Version of tkn-local to install (latest-release, v0.4.0, etc.)'
     required: true
     default: 'latest-release'
+  pac-version:
+    description: 'Version of tkn-pac to install (latest-release, v0.5.5, etc.)'
+    required: true
+    default: 'latest-release'
   file:
     description: 'Relative path to the file to run'
     required: true
@@ -28,6 +32,14 @@ runs:
       # - otherwise, install the specified version.
       case ${{ inputs.version }} in
       latest-release)
+        pac_tag=$(curl -s -u "username:${{ github.token }}" https://api.github.com/repos/vdemeester/buildkit-tekton/releases/latest | jq -r '.tag_name')
+        ;;
+      *)
+        pac_tag="${{ inputs.version }}"
+      esac
+
+      case ${{ inputs.version }} in
+      latest-release)
         tag=$(curl -s -u "username:${{ github.token }}" https://api.github.com/repos/vdemeester/buildkit-tekton/releases/latest | jq -r '.tag_name')
         ;;
       *)
@@ -44,6 +56,11 @@ runs:
         curl -fsL https://github.com/vdemeester/buildkit-tekton/releases/download/${tag}/tkn-local_${tag:1}_${os}_x86_64.tar.gz | sudo tar xzf - -C /usr/local/bin tkn-local
       fi
 
+      if [[ ! -z ${pac_tag} ]]; then
+        echo "Installing tkn-pac @ ${pac_tag} for ${os}"
+        curl -fsL https://github.com/openshift-pipelines/pipelines-as-code/releases/download/${tag}/tkn-pac_${tag:1}_${os}_x86_64.tar.gz | sudo tar xzf - -C /usr/local/bin tkn-pac
+      fi
+
       # Run !
       if [[ -z ${{ inputs.file }} ]]; then
         echo "Should provide a resource to run"
@@ -52,7 +69,7 @@ runs:
       file=${{ inputs.file }}
       if [[ ${{ inputs.pipelines-as-code }} == "true" ]]; then
         file=$(mktemp)
-        tkn pac resolve -p=revision=${{ github.ref }} --p=repo-url=github.com/${{ github.repository }} -f ${{ inputs.file }} > ${file}
+        tkn-pac resolve -p=revision=${{ github.ref }} --p=repo-url=github.com/${{ github.repository }} -f ${{ inputs.file }} > ${file}
       fi
       tkn-local run -f ${file}
     shell: bash
