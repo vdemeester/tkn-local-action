@@ -1,0 +1,27 @@
+name: Use Action
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  use-action:
+    name: Use Aciton
+    strategy:
+      matrix:
+        platform: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.platform }}
+
+    steps:
+    - uses: actions/checkout@v2
+
+    # Minimal run
+    - uses: vdemeester/tkn-local-action@main
+      with:
+        file: .tekton/test.yaml
+
+    # Pipeline-as-code
+    - uses: vdemeester/tkn-local-action@main
+      with:
+        file: .tekton/pac.yaml
+        pipelines-as-code: true
