@@ -68,7 +68,7 @@ runs:
       fi
       file=${{ inputs.file }}
       if [[ ${{ inputs.pipelines-as-code }} == "true" ]]; then
-        file=$(mktemp)
+        file=$(mktemp -p ${PWD})
         tkn-pac resolve -p=revision=${{ github.ref }} -p=repo-url=github.com/${{ github.repository }} -f ${{ inputs.file }} > ${file}
       fi
       tkn-local run -f ${file}
