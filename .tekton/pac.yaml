@@ -34,5 +34,5 @@ spec:
           steps:
           - image: bash:latest
             script: |
-              echo URL: $(params.repo_url)
-              echo Revision: $(params.revision
+              echo URL: $(params.url)
+              echo Revision: $(params.revision)
