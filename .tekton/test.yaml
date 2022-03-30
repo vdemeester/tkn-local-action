@@ -1,0 +1,22 @@
+apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  name: test
+spec:
+  pipelineSpec:
+    tasks:
+      - name: hello
+        taskSpec:
+          steps:
+          - image: hello
+            image: bash:latest
+            script: |
+              echo hello
+      - name: bye
+        runAfter: [ bye ]
+        taskSpec:
+          steps:
+          - image: bye
+            image: bash:latest
+            script: |
+              echo bye
