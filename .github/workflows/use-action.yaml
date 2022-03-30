@@ -3,6 +3,8 @@ name: Use Action
 on:
   push:
     branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
   use-action:
