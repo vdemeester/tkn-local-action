@@ -30,13 +30,6 @@ runs:
       # - if version is "tip", install from tip of main.
       # - if version is "latest-release", look up latest release.
       # - otherwise, install the specified version.
-      case ${{ inputs.version }} in
-      latest-release)
-        pac_tag=$(curl -s -u "username:${{ github.token }}" https://api.github.com/repos/vdemeester/buildkit-tekton/releases/latest | jq -r '.tag_name')
-        ;;
-      *)
-        pac_tag="${{ inputs.version }}"
-      esac
 
       case ${{ inputs.version }} in
       latest-release)
@@ -44,6 +37,13 @@ runs:
         ;;
       *)
         tag="${{ inputs.version }}"
+      esac
+      case ${{ inputs.version }} in
+      latest-release)
+        pac_tag=$(curl -s -u "username:${{ github.token }}" https://api.github.com/repos/openshift-pipelines/pipelines-as-code/releases/latest | jq -r '.tag_name')
+        ;;
+      *)
+        pac_tag="${{ inputs.version }}"
       esac
 
       os=${{ runner.os }}
@@ -58,7 +58,7 @@ runs:
 
       if [[ ! -z ${pac_tag} ]]; then
         echo "Installing tkn-pac @ ${pac_tag} for ${os}"
-        curl -fsL https://github.com/openshift-pipelines/pipelines-as-code/releases/download/${tag}/tkn-pac_${tag:1}_${os}_x86_64.tar.gz | sudo tar xzf - -C /usr/local/bin tkn-pac
+        curl -fsL https://github.com/openshift-pipelines/pipelines-as-code/releases/download/${tag}/tkn-pac_${pac_tag}_${os}_x86_64.tar.gz | sudo tar xzf - -C /usr/local/bin tkn-pac
       fi
 
       # Run !
