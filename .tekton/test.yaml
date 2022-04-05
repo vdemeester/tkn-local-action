@@ -11,7 +11,7 @@ spec:
           - image: hello
             image: bash:latest
             script: |
-              echo hello
+              echo hello world
       - name: bye
         runAfter: [ hello ]
         taskSpec:
@@ -19,4 +19,4 @@ spec:
           - image: bye
             image: bash:latest
             script: |
-              echo bye
+              echo bye world
